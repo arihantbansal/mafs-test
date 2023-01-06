@@ -1,38 +1,40 @@
-import * as React from "react"
+import * as React from "react";
+import { ChakraProvider, Box, Text, Grid, theme } from "@chakra-ui/react";
+import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+	Mafs,
+	CartesianCoordinates,
+	FunctionGraph,
+	labelPi,
+	useMovablePoint,
+} from "mafs";
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+function App() {
+	const phase = useMovablePoint([0, 0], {
+		constrain: "horizontal",
+	});
+
+	return (
+		<ChakraProvider theme={theme}>
+			<Box textAlign="center" fontSize="xl">
+				<Grid minH="100vh" p={3}>
+					<ColorModeSwitcher justifySelf="flex-end" />
+					<Text>Mafs Test</Text>
+					<Mafs
+						viewBox={{ x: [-10, 10], y: [-2, 2] }}
+						preserveAspectRatio={false}>
+						<CartesianCoordinates
+							subdivisions={4}
+							xAxis={{ lines: Math.PI, labels: labelPi }}
+						/>
+						<FunctionGraph.OfX y={(x) => Math.sin(x - phase.x)} />
+						{phase.element}
+					</Mafs>
+				</Grid>
+			</Box>
+		</ChakraProvider>
+	);
+}
+
+export default App;
+
